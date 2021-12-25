@@ -145,8 +145,10 @@ def animate(frame_number):
     return fig,
 
 
+# fig = init_tree()
+# plt.show()
 
 anim = animation.FuncAnimation(fig, animate, init_func=init_tree,
-                               frames=90, interval=10, blit=True) 
+                               frames=100, interval=100, blit=True) 
 
 anim.save("christmastree.mp4")
