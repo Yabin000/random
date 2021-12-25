@@ -17,7 +17,10 @@ FACECOLOR='black'
 
 fig = plt.figure(figsize=(10,8))
 ax = fig.add_subplot(111, projection='3d')
-
+plt.subplots_adjust(top = 1, bottom = 0, 
+                    right = 1, left = 0, 
+                    hspace = 0, wspace = 0)
+plt.margins(0,0,0)
 
 def init_tree():
     """plot the initial tree"""
@@ -89,8 +92,8 @@ def animate(frame_number):
 
     ## tree
     Z = [i for i in range(K)]
-    X = [np.cos(i/10+frame_number/10)*(K-i) for i in range(K)]
-    Y = [np.sin(i/10+frame_number/10)*(K-i) for i in range(K)]
+    X = [np.cos(i/10-frame_number/10)*(K-i) for i in range(K)]
+    Y = [np.sin(i/10-frame_number/10)*(K-i) for i in range(K)]
     ax.scatter(X,Y,Z, c="green", marker="D", s=18)
 
     ## head star
@@ -103,23 +106,23 @@ def animate(frame_number):
     ## decleration
     step = 4
     Z = [i for i in range(1,K,step)]
-    X = [np.cos(i/5+2+frame_number/10)*(K-i+10) for i in range(1,K,step)]
-    Y = [np.sin(i/5+2+frame_number/10)*(K-i+10) for i in range(1,K,step)]
+    X = [np.cos(i/5+2-frame_number/10)*(K-i+10) for i in range(1,K,step)]
+    Y = [np.sin(i/5+2-frame_number/10)*(K-i+10) for i in range(1,K,step)]
     ax.scatter(X,Y,Z, c="red", marker="*", s=25)
 
     Z = [i for i in range(1,K,step)]
-    X = [np.sin(i/5+2+frame_number/10)*(K-i+10) for i in range(1,K,step)]
-    Y = [np.cos(i/5+2+frame_number/10)*(K-i+10) for i in range(1,K,step)]
+    X = [np.sin(i/5+2-frame_number/10)*(K-i+10) for i in range(1,K,step)]
+    Y = [np.cos(i/5+2-frame_number/10)*(K-i+10) for i in range(1,K,step)]
     ax.scatter(X,Y,Z, c="orange", marker="p", s=18)
 
     Z = [i for i in range(800, int(K/4), -(step+1))]
-    X = [np.sin(i/5+2+frame_number/10)*(K/4-i+10) for i in range(int(K/4), 800, (step+1))]
-    Y = [np.cos(i/5+2+frame_number/10)*(K/4-i+10) for i in range(int(K/4), 800, (step+1))]
+    X = [np.sin(i/5+2-frame_number/10)*(K/4-i+10) for i in range(int(K/4), 800, (step+1))]
+    Y = [np.cos(i/5+2-frame_number/10)*(K/4-i+10) for i in range(int(K/4), 800, (step+1))]
     ax.scatter(X, Y, Z, c='white', marker="o", s=18)
 
     Z = [i for i in range(800, int(K/3), -(step+1))]
-    X = [np.cos(i/5+2+frame_number/10)*(K/3-i+10) for i in range(int(K/3), 800, (step+1))]
-    Y = [np.sin(i/5+2+frame_number/10)*(K/3-i+10) for i in range(int(K/3), 800, (step+1))]
+    X = [np.cos(i/5+2-frame_number/10)*(K/3-i+10) for i in range(int(K/3), 800, (step+1))]
+    Y = [np.sin(i/5+2-frame_number/10)*(K/3-i+10) for i in range(int(K/3), 800, (step+1))]
     ax.scatter(X, Y, Z, c='purple', marker="X", s=25)
 
     ## remove tick
@@ -145,10 +148,10 @@ def animate(frame_number):
     return fig,
 
 
-# fig = init_tree()
-# plt.show()
+if __name__ == "__main__":
+    # fig = init_tree()
+    # plt.show()
 
-anim = animation.FuncAnimation(fig, animate, init_func=init_tree,
-                               frames=100, interval=100, blit=True) 
-
-anim.save("christmastree.mp4")
+    anim = animation.FuncAnimation(fig, animate, init_func=init_tree,
+                                   frames=100, interval=150, blit=True) 
+    anim.save("christmastree.mp4")
