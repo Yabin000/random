@@ -2,6 +2,10 @@
 ## This script creates a simple fireworks for the 2022 new year
 ## Inspired by: https://www.youtube.com/watch?v=Yw4qIorzy-Q
 ## Also refered to: https://www.youtube.com/watch?v=jO6qQDNa2UY&t=16s
+##
+## Note:
+##  This is not a serious project. I may not use pygame properly, but 
+##  just somehow get pygame displays what I want
 ## ========================= Happy New Year ========================= ## 
 
 
@@ -38,10 +42,14 @@ class DrawFireworks:
         self.num_frames = num_frames 
         self.num_fireworks = num_fireworks
 
-        self.fireworks = []
+        ## create fireworks when init the class
+        self.fireworks = list(self._create_fireworks())
+        
+        ## setup surface for pygame display
         self.surface = pygame.display.set_mode((self.width, self.height))
         self.bg = pygame.image.load(self.bg_path).convert_alpha()
         self.bg = pygame.transform.smoothscale(self.bg, (self.width, self.height))
+        pygame.display.set_caption(self.caption)
     
 
     def _create_fireworks(self):
@@ -53,16 +61,13 @@ class DrawFireworks:
             start_color = (random.randint(0, 255),
                            random.randint(0, 255),
                            random.randint(0, 255))
-            # yield Fireworks(x_loc, y_loc, start_time, start_color, self.num_sparks)
-            self.fireworks.append(Fireworks(x_loc, y_loc, start_time, start_color, self.num_sparks))
-        return self.fireworks
+            yield Fireworks(x_loc, y_loc, start_time, start_color, self.num_sparks)
+        #     self.fireworks.append(Fireworks(x_loc, y_loc, start_time, start_color, self.num_sparks))
+        # return self.fireworks
 
 
     def _run_fireworks(self):
         self.surface.blit(self.bg, (0,0))
-        pygame.display.set_caption(self.caption)
-        
-        self.fireworks = self._create_fireworks()
         for firework in self.fireworks:
             firework.tick()
             firework.draw(self.surface) 
@@ -89,10 +94,10 @@ class DrawFireworks:
 
 if __name__ == "__main__":
     draw_fireworks = DrawFireworks(width=900, height=600, 
-                                   bg_path='skyline.png',
-                                   fps=60, 
+                                   bg_path='assets/lanzhou.png',
+                                   fps=30, 
                                    caption='Happy New Year!', 
-                                   num_sparks=100, 
-                                   num_fireworks=100, 
+                                   num_sparks=200, 
+                                   num_fireworks=200, 
                                    num_frames=900)
     draw_fireworks.main()

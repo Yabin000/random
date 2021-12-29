@@ -2,6 +2,10 @@
 ## This script creates a simple fireworks for the 2022 new year
 ## Inspired by: https://www.youtube.com/watch?v=Yw4qIorzy-Q
 ## Also refered to: https://www.youtube.com/watch?v=jO6qQDNa2UY&t=16s
+##
+## Note:
+##  This is not a serious project. I may not use pygame properly, but 
+##  just somehow get pygame displays what I want
 ## ========================= Happy New Year ========================= ## 
 
 
