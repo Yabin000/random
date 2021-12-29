@@ -37,8 +37,8 @@ class Spark:
         self.fx, self.fy = float(self.x), float(self.y)
         self.vx, self.vy = self.vx0, self.vy0 
         self.color = self.color0
-        self.framecount = 0
-        self.active = True
+        self.frame_spark = 0
+        self.active_spark = True
         
         ## compute color fade 
         r0, g0, b0 = self.color0
@@ -65,14 +65,14 @@ class Spark:
         self.color = (r_new, g_new, b_new)
 
         ## track frames
-        if (self.framecount >= self.lifetime):
-            self.active=False
-        self.framecount += 1
+        if (self.frame_spark >= self.lifetime):
+            self.active_spark=False
+        self.frame_spark += 1
 
 
     def draw(self, surface):
         """draw one spark"""
-        if self.active:
+        if self.active_spark:
             return pygame.draw.rect(surface, self.color, pygame.Rect(self.x, self.y, 4,4))
         else:
             return None 
@@ -80,13 +80,12 @@ class Spark:
 
 
 class Fireworks:
-    """ Create Fireworks of all sparks"""
+    """ The fireworks class is a colloection of Spark class"""
 
     def __init__(self, x_loc:int, y_loc:int, start_time:int, 
                  start_color:Tuple[int], num_sparks:int):
         """
-        init the fireworks with multiple sparks. This class will
-        call the Spark class
+        init the fireworks with multiple sparks. 
         ------
         (x_loc, y_loc): start location of sparks
         start_time: at which frame to start the spart
@@ -97,17 +96,17 @@ class Fireworks:
         self.start_color = start_color 
         self.num_sparks = num_sparks
 
-        self.framecount = 0
-        self.active = True
+        self.frame_fireworks = 0
+        self.active_fireworks = True
         self.sparks = [] ## hold all sparks 
 
 
     def tick(self):
         """
-        start the spark when it is the time (start_time == framecount)
+        start the spark when it is the time (start_time == frame_fireworks)
         """
         ## generate sparks
-        if self.framecount == self.start_time:
+        if self.frame_fireworks == self.start_time:
             for i in range(self.num_sparks):
                 ## init each spark
                 rand_direction = random.uniform(0, np.pi)
@@ -121,23 +120,23 @@ class Fireworks:
                                          self.start_color, lifetime))
 
         ## sparks motions
-        elif self.framecount > self.start_time:
+        elif self.frame_fireworks > self.start_time:
             ## track the number of active sparks
             num_active = 0   
             ## compute the motion of sparks
             for spark in self.sparks:
                 spark.tick()
-                if spark.active:
+                if spark.active_spark:
                     num_active += 1
             ## check the active of the Fireworks class 
             if num_active == 0 :
-                self.active = False
+                self.active_fireworks = False
 
-        self.framecount += 1
+        self.frame_fireworks += 1
 
 
     def draw(self, surface):
-        if self.active and (self.framecount >= self.start_time):
+        if self.active_fireworks and (self.frame_fireworks >= self.start_time):
             for spark in self.sparks:
-                if spark.active:
+                if spark.active_spark:
                     spark.draw(surface)

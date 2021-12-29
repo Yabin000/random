@@ -12,65 +12,87 @@ from fireworks import Spark, Fireworks
 
 
 
-## draw canvas
-WIDTH, HEIGHT = 900, 600
-SURFACE = pygame.display.set_mode((WIDTH, HEIGHT))
-IMG_PATH = 'skyline.png'
-BG = pygame.image.load(IMG_PATH).convert_alpha()
-BG = pygame.transform.smoothscale(BG, (WIDTH, HEIGHT))
-pygame.display.set_caption("Happy New Year")
+class DrawFireworks:
+    """
+    This class uses the pygame module, and pre-defined Spark and Firework 
+    class to draw fireworks
+    """
 
-## init frames
-FPS = 60
-NUM_SPARKS = 300
-NUM_FRAMES = 900
-NUM_FRIEWORKS = 200
+    def __init__(self, width:int, height:int, bg_path:str, fps:int, caption:str, 
+                 num_sparks:int, num_fireworks:int, num_frames:int):
+        """ 
+        args: 
+            (width, height): canvas dimension
+            bg_path: path of background image
+            fps: frame per second
+            caption: caption of the canvas
+            num_sparks: max number of sparks per frame
+            num_fireworks: number of fireworks
+            num_frames: number of frames
+        """
+        self.width, self.height = width, height
+        self.bg_path = bg_path
+        self.fps = fps
+        self.caption = caption
+        self.num_sparks = num_sparks 
+        self.num_frames = num_frames 
+        self.num_fireworks = num_fireworks
 
-
-
-def create_fireworks():
-    fireworks = []
-    for i in range(NUM_FRIEWORKS):
-        x_loc = random.randint(0, WIDTH)
-        y_loc = random.randint(0, HEIGHT/3)
-        start_time = random.randint(0, NUM_FRAMES)
-        start_color = (random.randint(0, 255),
-                    random.randint(0, 255),
-                    random.randint(0, 255))
-        fireworks.append(Fireworks(x_loc, y_loc, start_time, start_color, NUM_SPARKS))
+        self.fireworks = []
+        self.surface = pygame.display.set_mode((self.width, self.height))
+        self.bg = pygame.image.load(self.bg_path).convert_alpha()
+        self.bg = pygame.transform.smoothscale(self.bg, (self.width, self.height))
     
-    return fireworks
+
+    def _create_fireworks(self):
+        """support function to create fireworks"""
+        for _ in range(self.num_fireworks):
+            x_loc = random.randint(0, self.width)
+            y_loc = random.randint(0, self.height/3)
+            start_time = random.randint(0, self.num_frames)
+            start_color = (random.randint(0, 255),
+                           random.randint(0, 255),
+                           random.randint(0, 255))
+            # yield Fireworks(x_loc, y_loc, start_time, start_color, self.num_sparks)
+            self.fireworks.append(Fireworks(x_loc, y_loc, start_time, start_color, self.num_sparks))
+        return self.fireworks
 
 
-def run(fireworks):
-    SURFACE.blit(BG, (0, 0))
-    for firework in fireworks:
-        firework.tick()
-        firework.draw(SURFACE)
-    pygame.display.update() ## update to display
+    def _run_fireworks(self):
+        self.surface.blit(self.bg, (0,0))
+        pygame.display.set_caption(self.caption)
+        
+        self.fireworks = self._create_fireworks()
+        for firework in self.fireworks:
+            firework.tick()
+            firework.draw(self.surface) 
+        pygame.display.update()
 
 
+    def main(self):
+        ## a while loop keep pygame running
+        clock = pygame.time.Clock()
+        
+        is_running = True 
+        while is_running:
+            clock.tick(self.fps)
+            ## pygame tradition
+            ## looping pygame event until QUIT
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    is_running = False
+            ## run fireworks
+            self._run_fireworks()
 
-def main(fireworks):
-    ## a while loop keep pygame running
-    clock = pygame.time.Clock()
-    is_running = True 
-    while run:
-        clock.tick(FPS)
-        ## pygame tradition
-        ## looping pygame event until QUIT
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                is_running = False
-
-        ## run fireworks
-        run(fireworks)
-
-    pygame.quit()
-
-
+        pygame.quit()
 
 
 if __name__ == "__main__":
-    fireworks = create_fireworks()
-    main(fireworks)
+    draw_fireworks = DrawFireworks(width=900, height=600, 
+                                   bg_path='skyline.png',
+                                   fps=60, 
+                                   caption='Happy New Year!', 
+                                   num_sparks=100, 
+                                   num_fireworks=100, 
+                                   num_frames=900)
+    draw_fireworks.main()
